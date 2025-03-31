@@ -65,7 +65,7 @@ for region_name, sido_code in regions.items():
 
     # 🔹 특정 컬럼(주소, 시군구)만 너비 조정
     ws.column_dimensions[get_column_letter(5)].width = 20  # 시군구
-    ws.column_dimensions[get_column_letter(6)].width = 40  # 주소
+    ws.column_dimensions[get_column_letter(6)].width = 60  # 주소
 
     wb.save(file_name)
     print(f"{region_name} 지역 크롤링 완료! 엑셀 저장: {file_name}")
