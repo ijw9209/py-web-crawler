@@ -4,9 +4,14 @@ import pandas as pd
 from datetime import datetime
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
+import os  # 🔹 폴더 생성용 모듈 추가
 
 # 현재 날짜 및 시간
 now = datetime.now().strftime("%Y%m%d_%H%M")
+
+# 🔹 저장할 폴더 설정
+output_folder = "output"
+os.makedirs(output_folder, exist_ok=True)  # 폴더 없으면 생성
 
 # 지역 코드 목록
 regions = {"서울": "01", "경기": "07"}
@@ -48,11 +53,14 @@ for region_name, sido_code in regions.items():
                             all_data.append(cols_text)
 
     df = pd.DataFrame(all_data, columns=["번호", "공고일자", "청약 접수기간", "시도", "시군구", "주소", "주택유형", "전용면적(m2)", "임대보증금액", "신청자수"])
-    file_name = f'크롤링_데이터_{region_name}_{now}.xlsx'
-    df.to_excel(file_name, index=False, engine='openpyxl')
+    # 🔹 파일 경로 설정 (output 폴더에 저장)
+    file_name = f"크롤링_데이터_{region_name}_{now}.xlsx"
+    file_path = os.path.join(output_folder, file_name)
+
+    df.to_excel(file_path, index=False, engine='openpyxl')
 
     # 🔹 엑셀 파일 열기
-    wb = load_workbook(file_name)
+    wb = load_workbook(file_path)
     ws = wb.active
 
     # 🔹 주소 컬럼 하이퍼링크 적용
@@ -67,7 +75,7 @@ for region_name, sido_code in regions.items():
     ws.column_dimensions[get_column_letter(5)].width = 20  # 시군구
     ws.column_dimensions[get_column_letter(6)].width = 60  # 주소
 
-    wb.save(file_name)
-    print(f"{region_name} 지역 크롤링 완료! 엑셀 저장: {file_name}")
+    wb.save(file_path)
+    print(f"{region_name} 지역 크롤링 완료! 엑셀 저장: {file_path}")
 
 print("모든 지역 크롤링 완료!")
