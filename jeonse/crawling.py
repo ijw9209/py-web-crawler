@@ -1,6 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from datetime import datetime
+
+# 현재 날짜 및 시간 가져오기
+now = datetime.now().strftime("%Y%m%d_%H%M")
 
 # 크롤링할 URL
 url = 'https://www.khug.or.kr/jeonse/web/s07/s070102.jsp'
@@ -45,8 +49,10 @@ for page in range(1, last_page + 1):
 df = pd.DataFrame(all_data, columns=["번호", "공고일자", "청약 접수기간	", "시도", "시군구" ,"주소", "주택유형" , "전용면적(m2)" , "임대보증금액" ,"신청자수"])  # 실제 테이블에 맞는 열 이름으로 수정
 
 # 엑셀 파일로 저장
-df.to_excel('크롤링_데이터.xlsx', index=False, engine='openpyxl')
-print("엑셀 파일로 저장 완료!")
+# 파일 이름에 날짜와 시간 추가
+file_name = f'크롤링_데이터_{now}.xlsx'
+df.to_excel(file_name, index=False, engine='openpyxl')
+print(f"엑셀 파일 저장 완료: {file_name}")
 
 # 전체 데이터 출력 (원하는 형식으로 처리)
 for data in all_data:
