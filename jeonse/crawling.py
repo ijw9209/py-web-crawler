@@ -23,8 +23,9 @@ last_page = 26 #int(page_numbers[-1].text)  # 마지막 페이지 번호 추출
 all_data = []
 
 for page in range(1, last_page + 1):
-    # 페이지 번호를 쿼리 파라미터로 추가하여 URL 수정
+    # 페이지 번호를 쿼리 파라미터로 추가하여 URL 수정 01 서울 07 경기
     page_url = f"{url}?sbGugun=ALL&CMB_SIDO=01&cur_page={page}"
+    # page_url = f"{url}?sbGugun=ALL&CMB_SIDO=07&cur_page={page}"
     response = requests.get(page_url)
     
     if response.status_code == 200:
@@ -50,7 +51,7 @@ df = pd.DataFrame(all_data, columns=["번호", "공고일자", "청약 접수기
 
 # 엑셀 파일로 저장
 # 파일 이름에 날짜와 시간 추가
-file_name = f'크롤링_데이터_{now}.xlsx'
+file_name = f'크롤링_데이터{now}.xlsx'
 df.to_excel(file_name, index=False, engine='openpyxl')
 print(f"엑셀 파일 저장 완료: {file_name}")
 
